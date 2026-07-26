@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "help",
     aliases: ["menu", "commands"],
-    version: "6.3",
+    version: "6.4",
     author: "EryXenX",
     shortDescription: "Show all commands",
     longDescription: "Show all commands in clean UI",
@@ -44,14 +44,6 @@ module.exports = {
       }).join("");
 
     const cleanCategoryName = (text) => text ? text.toLowerCase() : "others";
-
-    const categoryEmojis = {
-      system: "⚙️",
-      economy: "💰",
-      moderation: "🛡️",
-      fun: "🎮",
-      others: "📁"
-    };
 
     if (args[0]) {
       const cmdName = args[0].toLowerCase();
@@ -93,23 +85,22 @@ module.exports = {
       categories[cat].push(name);
     }
 
-    const formatCommands = (cmds) =>
-      cmds.sort().map(c => `   ➥ ${fancyFont(c)}`).join("\n");
-
     let msg =
-`┏━━━━━━━━━━━━━┓
- 📜 𝐂𝐌𝐃 𝐇𝐔𝐁
-┗━━━━━━━━━━━━━┛
- 🔧 ${prefix} | 📊 ${allCommands.size} cmds
-━━━━━━━━━━━━━━━\n`;
+`╭─ 𝐂𝐎𝐌𝐌𝐀𝐍𝐃𝐒 𝐌𝐄𝐍𝐔
+├ Prefix : ${prefix}
+├ Total  : ${allCommands.size}
+├ Author : EryXenX\n`;
 
-    for (const cat of Object.keys(categories)) {
-      const emoji = categoryEmojis[cat] || "📁";
-      msg += `\n${emoji} 『 ${categoryFont(cat.toUpperCase())} 』 ✦ ${categories[cat].length}\n`;
-      msg += formatCommands(categories[cat]) + "\n";
+    for (const cat of Object.keys(categories).sort()) {
+      const catTitle = categoryFont(cat.toUpperCase());
+      msg += `\n┌─ ${catTitle} ─┐\n`;
+      for (const cmdName of categories[cat].sort()) {
+        msg += `│ ⎙ ${fancyFont(cmdName)}\n`;
+      }
+      msg += `└─────────────┘\n`;
     }
 
-    msg += `\n━━━━━━━━━━━━━━━\n✨ ${prefix}help <command>`;
+    msg += `\n╰─ Use: ${prefix}help <command>`;
 
     const gifURLs = [
       "https://i.imgur.com/Xw6JTfn.gif",
